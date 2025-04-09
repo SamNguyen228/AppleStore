@@ -390,40 +390,47 @@ namespace WebsiteTMDT.Controllers
             return RedirectToAction("Login");
         }
 
-        private void SendResetEmail(string toEmail, string resetLink)
+       private void SendResetEmail(string toEmail, string resetLink)
         {
-            string fromEmail = "duonghoangsamet@gmail.com";
-            string password = "fuym cdrm oqep kgyh";
-
-            string subject = "Đặt lại mật khẩu";
-            string body = $"<p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>" +
-                          $"<p>Nhấn vào <a href='{resetLink}'>liên kết này</a> để đặt lại mật khẩu.</p>" +
-                          "<p>Liên kết sẽ hết hạn sau 1 giờ.</p>";
-
-            var smtpClient = new SmtpClient("smtp.gmail.com")
+            string fromEmail = Environment.GetEnvironmentVariable("SMTP_EMAIL_ADDRESS");
+            string password = Environment.GetEnvironmentVariable("SMTP_EMAIL_PASSWORD");
+        
+            if (string.IsNullOrEmpty(fromEmail) || string.IsNullOrEmpty(password))
             {
-                Port = 587,
-                Credentials = new NetworkCredential(fromEmail, password),
-                EnableSsl = true,
-            };
-
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(fromEmail, "Apple Store"),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
-            };
-            mailMessage.To.Add(toEmail);
-
-            try
-            {
-                smtpClient.Send(mailMessage);
+                Console.WriteLine("Email hoặc mật khẩu email chưa được cấu hình đúng biến môi trường.");
+                return;
             }
-            catch (Exception ex)
+        
+            string subject = "Đặt lại mật khẩu";
+            string body = $@"
+                <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
+                <p>Nhấn vào <a href='{resetLink}'>liên kết này</a> để đặt lại mật khẩu.</p>
+                <p>Liên kết sẽ hết hạn sau 1 giờ.</p>";
+        
+            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
             {
-                // Log lỗi hoặc thông báo
-                Console.WriteLine("Lỗi gửi mail: " + ex.Message);
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new NetworkCredential(fromEmail, password);
+                smtpClient.EnableSsl = true;
+        
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(fromEmail, "Apple Store"),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true,
+                };
+                mailMessage.To.Add(toEmail);
+        
+                try
+                {
+                    smtpClient.Send(mailMessage);
+                    Console.WriteLine("Email đặt lại mật khẩu đã được gửi thành công.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi gửi email: " + ex.Message);
+                }
             }
         }
     }
