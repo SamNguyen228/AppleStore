@@ -43,6 +43,7 @@
                 <li class="nav-item"><a asp-controller="Order" asp-action="Index" class="nav-link text-dark"><i class="fas fa-shopping-cart me-2"></i>Quản lý đơn hàng</a></li>
                 <li class="nav-item"><a asp-controller="Promotion" asp-action="Index" class="nav-link text-dark"><i class="fas fa-tags me-2"></i>Quản lý khuyến mãi</a></li>
                 <li class="nav-item"><a asp-controller="Report" asp-action="Index" class="nav-link text-dark"><i class="fas fa-chart-line me-2"></i>Theo dõi thống kê</a></li>
+                <li class="nav-item"><a asp-controller="Chat" asp-action="Index" class="nav-link text-dark"><i class="fas fa-headset me-2"></i>Quản lí hỗ trợ</a></li>
                 <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="nav-link text-danger"><i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất</a></li>
             </ul>
         </div>
@@ -59,7 +60,7 @@
         var passwordInput = document.getElementById("passwordField");
         var toggleIcon = document.getElementById("toggleIcon");
 
-            if (passwordInput) { // Kiểm tra nếu phần tử tồn tại
+            if (passwordInput) {
                 if (passwordInput.type === "password") {
                     passwordInput.type = "text";
                     toggleIcon.classList.replace("bi-eye-slash", "bi-eye");

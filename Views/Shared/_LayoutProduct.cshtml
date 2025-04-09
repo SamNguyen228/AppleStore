@@ -95,6 +95,90 @@
 		::-webkit-scrollbar-thumb:horizontal:hover {
 		background-color: red;
 		}
+
+		/* Floating Chat Button */
+		.chat-button {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background-color: #25d366;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			font-size: 24px;
+			width: 60px;
+			height: 60px;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Chat Popup Box */
+		.chat-popup {
+			position: fixed;
+			bottom: 80px;
+			right: 20px;
+			width: 350px;
+			max-height: 550px;
+			background-color: #ffffff;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			display: none;
+			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+			z-index: 1000;
+		}
+
+		.chat-header {
+			background-color: #25d366;
+			color: white;
+			padding: 10px;
+			border-radius: 8px 8px 0 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.chat-title {
+			font-size: 16px;
+		}
+
+		.close-btn {
+			background: none;
+			color: white;
+			border: none;
+			font-size: 20px;
+			cursor: pointer;
+		}
+
+		.chat-body {
+			padding: 10px;
+		}
+
+		textarea {
+			width: 100%;
+			padding: 8px;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+			resize: none;
+		}
+
+		.send-btn {
+			width: 100%;
+			padding: 10px;
+			background-color: #25d366;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+
+			.send-btn:hover {
+				background-color: #128c7e;
+			}
+
 	</style>
 	@if (TempData["Error"] != null)
 	{
@@ -279,6 +363,26 @@
         @RenderBody()
 
         @await Html.PartialAsync("_Footer")
+		<!-- Chat Popup Box -->
+		<div id="chat-popup" class="chat-popup">
+			<div class="chat-header">
+				<span class="chat-title">Liên hệ với chúng tôi</span>
+				<button class="close-btn" onclick="closeChat()">X</button>
+			</div>
+			<div class="chat-body">
+				<!-- Chỉ hiển thị trường nhập tin nhắn -->
+				<textarea id="message" placeholder="Nhập tin nhắn của bạn..." rows="4"></textarea>
+				<button class="send-btn" onclick="sendMessage()">Gửi</button>
+			</div>
+		</div>
+
+		@if (User.Identity.IsAuthenticated && User.IsInRole("Customer"))
+		{
+			<!-- Floating Chat Button (Font Awesome chat bubble icon) -->
+			<button id="chat-button" class="chat-button" onclick="openChat()">
+				<i class="fa fa-comment-dots"></i> <!-- Font Awesome Chat Icon -->
+			</button>
+		}
     </div>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
@@ -751,29 +855,55 @@
 		}, 3000);
 	</script>
 
+	<!-- Tin Nhắn -->
 	<script>
-    function redirectToPayPal() {
-    var totalAmount = document.getElementById('totalAmount').textContent; // Tổng tiền từ trang
-    totalAmount = totalAmount.replace('$', '').trim(); // Lấy giá trị số
+		// Mở chat popup khi nhấn vào nút chat
+		function openChat() {
+			document.getElementById('chat-popup').style.display = 'block';
+			document.getElementById('chat-button').style.display = 'none';
+		}
 
-    // Gửi yêu cầu thanh toán qua PayPal
-    $.ajax({
-        url: '/Checkout/CreatePayment',
-        type: 'POST',
-        data: { amount: totalAmount },
-        success: function(response) {
-            if (response && response.approvalUrl) {
-                window.location.href = response.approvalUrl; // Chuyển hướng tới PayPal
-            } else {
-                alert('Không thể tạo thanh toán qua PayPal.');
-            }
-        },
-        error: function() {
-            alert('Có lỗi khi kết nối với PayPal.');
-        }
-    });
-}
-</script>
+		// Đóng chat popup khi nhấn vào nút đóng
+		function closeChat() {
+			document.getElementById('chat-popup').style.display = 'none';
+			document.getElementById('chat-button').style.display = 'block';
+		}
+
+		// Gửi tin nhắn và lưu vào cơ sở dữ liệu
+		function sendMessage() {
+			var message = document.getElementById('message').value;
+
+			// Kiểm tra xem tin nhắn có rỗng không
+			if (!message.trim()) {
+				alert('Vui lòng nhập tin nhắn của bạn.');
+				return;
+			}
+
+			// Gửi thông tin đến server qua AJAX (Fetch API)
+			fetch('/Chat/SaveMessage', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					message: message
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert('Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm với bạn!');
+					closeChat(); // Đóng popup sau khi gửi tin nhắn
+				} else {
+					alert('Lỗi khi gửi tin nhắn: ' + data.message);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('Đã có lỗi xảy ra khi gửi tin nhắn.');
+			});
+		}
+	</script>
 
 	<!-- jQuery Plugins -->
 	<script src="~/js/jquery.min.js"></script>

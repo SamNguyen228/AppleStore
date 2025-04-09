@@ -19,6 +19,8 @@ public partial class WebsiteContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<ChatMessage> ChatMessages { get; set; }
+
     public virtual DbSet<Invoice> Invoices { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
@@ -49,7 +51,7 @@ public partial class WebsiteContext : DbContext
     {
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__2EF52A2766E8E7A4");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__2EF52A274DFB5F34");
 
             entity.ToTable("Cart");
 
@@ -69,9 +71,9 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__D54EE9B487B4518E");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__D54EE9B432B16ABA");
 
-            entity.HasIndex(e => e.CategoryName, "UQ__Categori__5189E2555DA6DA63").IsUnique();
+            entity.HasIndex(e => e.CategoryName, "UQ__Categori__5189E255CE11DD4E").IsUnique();
 
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CategoryName)
@@ -79,9 +81,18 @@ public partial class WebsiteContext : DbContext
                 .HasColumnName("category_name");
         });
 
+        modelBuilder.Entity<ChatMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ChatMess__3214EC07E28F7710");
+
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoices__F58DFD49FD087983");
+            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoices__F58DFD494921BA93");
 
             entity.Property(e => e.InvoiceId).HasColumnName("invoice_id");
             entity.Property(e => e.IssuedDate)
@@ -104,7 +115,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__E059842FDB5A567E");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__E059842F766185F7");
 
             entity.Property(e => e.NotificationId).HasColumnName("notification_id");
             entity.Property(e => e.Content).HasColumnName("content");
@@ -119,7 +130,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__46596229E6DACBA6");
+            entity.HasKey(e => e.OrderId).HasName("PK__Orders__46596229700D50A9");
 
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.CreatedAt)
@@ -154,7 +165,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__Order_De__3C5A4080E730DF1C");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__Order_De__3C5A408012717D20");
 
             entity.ToTable("Order_Details");
 
@@ -177,7 +188,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__ED1FC9EA5682801A");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__ED1FC9EAF439512A");
 
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.CreatedAt)
@@ -205,7 +216,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Products__47027DF53015EA57");
+            entity.HasKey(e => e.ProductId).HasName("PK__Products__47027DF58749EE5D");
 
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Capacity)
@@ -241,7 +252,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__2CB9556BA7BE0679");
+            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__2CB9556BF06358AA");
 
             entity.Property(e => e.PromotionId).HasColumnName("promotion_id");
             entity.Property(e => e.CreatedAt)
@@ -273,7 +284,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__60883D902CC16CF2");
+            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__60883D905557CE8D");
 
             entity.Property(e => e.ReviewId).HasColumnName("review_id");
             entity.Property(e => e.CreatedAt)
@@ -296,7 +307,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__760965CC6CB8D73E");
+            entity.HasKey(e => e.RoleId).HasName("PK__Roles__760965CC8C7267D1");
 
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.CreatedAt)
@@ -317,7 +328,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<Shipment>(entity =>
         {
-            entity.HasKey(e => e.ShipmentId).HasName("PK__Shipment__41466E5996166918");
+            entity.HasKey(e => e.ShipmentId).HasName("PK__Shipment__41466E5985BEDB90");
 
             entity.Property(e => e.ShipmentId).HasColumnName("shipment_id");
             entity.Property(e => e.ActualDelivery).HasColumnName("actual_delivery");
@@ -347,7 +358,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<ShippingAddress>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Shipping__CAA247C881207773");
+            entity.HasKey(e => e.AddressId).HasName("PK__Shipping__CAA247C8D0EB3BAC");
 
             entity.ToTable("ShippingAddress");
 
@@ -364,7 +375,7 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<ShippingProvider>(entity =>
         {
-            entity.HasKey(e => e.ProviderId).HasName("PK__Shipping__00E213109C8D15F1");
+            entity.HasKey(e => e.ProviderId).HasName("PK__Shipping__00E21310194EE4FE");
 
             entity.ToTable("Shipping_Providers");
 
@@ -382,9 +393,9 @@ public partial class WebsiteContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370F26260CFD");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FE0011606");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164813517D4").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164B0A0ED88").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Address).HasColumnName("address");

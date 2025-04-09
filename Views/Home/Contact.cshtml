@@ -1,24 +1,26 @@
 ﻿@{
     ViewBag.Title = "Liên Hệ";
 }
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        alert("@Html.Raw(TempData["SuccessMessage"])");
+    </script>
+}
 <div class="section">
     <div class="container">
         <div class="row">
             <div class="col-md-7">
                 <h2 class="title">Liên hệ với chúng tôi</h2>
-                <form id="contact-form">
+                <form id="contact-form" method="post" asp-action="SubmitForm" asp-controller="Home">
                     <div class="form-group">
-                        <input class="input" type="text" name="name" placeholder="Tên của bạn" required>
+                        <input class="input" type="text" name="Name" placeholder="Tên của bạn" required>
                     </div>
                     <div class="form-group">
-                        <input class="input" type="email" name="email" placeholder="Email của bạn" required>
+                        <input class="input" type="email" name="Email" placeholder="Email của bạn" required>
                     </div>
                     <div class="form-group">
-                        <input class="input" type="text" name="subject" placeholder="Chủ đề" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="input" name="message" placeholder="Tin nhắn của bạn" required></textarea>
+                        <textarea class="input" name="Message" placeholder="Tin nhắn của bạn" required></textarea>
                     </div>
                     <button type="submit" class="primary-btn">Gửi Tin Nhắn</button>
                 </form>
@@ -39,4 +41,3 @@
         </div>
     </div>
 </div>
-

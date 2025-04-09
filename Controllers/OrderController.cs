@@ -99,10 +99,18 @@ namespace WebsiteTMDT.Controllers
             int currentStatusIndex = statusOrder.IndexOf(order.Status);
             int newStatusIndex = statusOrder.IndexOf(status);
 
-            // ✅ Luôn cho phép hủy
+            // ✅ Chỉ cho phép hủy nếu đơn hàng đang ở trạng thái Pending
             if (status == "Cancelled")
             {
-                order.Status = status;
+                if (order.Status == "Pending")
+                {
+                    order.Status = status;
+                }
+                else
+                {
+                    TempData["Error"] = "Chỉ được hủy đơn hàng khi đang ở trạng thái Pending!";
+                    return RedirectToAction("Index");
+                }
             }
             // ✅ Bắt buộc cập nhật đúng thứ tự (chỉ +1)
             else if (newStatusIndex == currentStatusIndex + 1)

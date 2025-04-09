@@ -62,6 +62,34 @@ namespace WebsiteTMDT.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitForm(ChatMessage model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Create new ChatMessage object
+                var chatMessage = new ChatMessage
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Message = model.Message,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // Save to the database
+                db.ChatMessages.Add(chatMessage);
+                await db.SaveChangesAsync();
+
+                // Optionally, you can send a confirmation message or redirect to another page
+                TempData["SuccessMessage"] = "Tin nhắn đã được gửi thành công!";
+                return RedirectToAction("Contact");  // Or redirect to another view
+            }
+
+            // Return the same page if there's an error
+            return View("Index", model);
+        }
+
         public IActionResult DashBoard()
         {
             return View();

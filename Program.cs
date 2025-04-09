@@ -59,10 +59,8 @@ namespace WebsiteTMDT
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-                //options.AddPolicy("StaffPolicy", policy => policy.RequireRole("Staff"));
                 options.AddPolicy("CustomerPolicy", policy => policy.RequireRole("Customer"));
             });
-
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

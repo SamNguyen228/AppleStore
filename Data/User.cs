@@ -21,7 +21,7 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public bool IsLocked { get; set; } = false;
+    public bool IsLocked { get; set; }
 
     public string? ResetPasswordToken { get; set; }
 
