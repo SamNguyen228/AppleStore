@@ -41,19 +41,17 @@ namespace WebsiteTMDT
                   options.SlidingExpiration = true; // Gia hạn phiên nếu có hoạt động
               })
               .AddGoogle(options =>
-              {
-                  var googleConfig = builder.Configuration.GetSection("Authentication:Google");
-                  options.ClientId = googleConfig["ClientId"];
-                  options.ClientSecret = googleConfig["ClientSecret"];
-                  options.CallbackPath = "/signin-google";
-              })
-              .AddFacebook(options =>
-              {
-                  var facebookConfig = builder.Configuration.GetSection("Authentication:Facebook");
-                  options.AppId = facebookConfig["AppId"];
-                  options.AppSecret = facebookConfig["AppSecret"];
-                  options.CallbackPath = "/signin-facebook";
-              });
+                {
+                    options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                    options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+                    options.CallbackPath = "/signin-google";
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = Environment.GetEnvironmentVariable("FACEBOOK_APP_ID");
+                    options.AppSecret = Environment.GetEnvironmentVariable("FACEBOOK_APP_SECRET");
+                    options.CallbackPath = "/signin-facebook";
+                });
 
             // Cấu hình Authorization
             builder.Services.AddAuthorization(options =>
