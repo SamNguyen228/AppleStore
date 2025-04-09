@@ -232,7 +232,10 @@ namespace WebsiteTMDT.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("duonghoangsamet@gmail.com", "fuym cdrm oqep kgyh"),
+                    Credentials = new NetworkCredential(
+                        Environment.GetEnvironmentVariable("SMTP_EMAIL_ADDRESS"),
+                        Environment.GetEnvironmentVariable("SMTP_EMAIL_PASSWORD")
+                    ),
                     EnableSsl = true,
                 };
 
