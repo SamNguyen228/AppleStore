@@ -137,8 +137,8 @@ namespace WebsiteTMDT.Controllers
         [Authorize(Roles = "Admin")]
         private void SendReplyToCustomer(string customerEmail, string replyMessage)
         {
-            string fromEmail = "duonghoangsamet@gmail.com";
-            string password = "fuym cdrm oqep kgyh";
+            string fromEmail = Environment.GetEnvironmentVariable("SMTP_EMAIL_ADDRESS");
+            string password = Environment.GetEnvironmentVariable("SMTP_EMAIL_PASSWORD");
 
             string subject = "Tin nhắn của bạn đã được trả lời";
             string body = $"<p>Kính gửi khách hàng,</p>" +
