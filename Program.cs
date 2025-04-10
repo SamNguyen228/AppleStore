@@ -117,6 +117,7 @@ namespace WebsiteTMDT
                 .AddSupportedCultures("en-US", "en-GB")
                 .AddSupportedUICultures("en-US", "en-GB");
 
+            app.UseRequestLocalization(localizationOptions);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
